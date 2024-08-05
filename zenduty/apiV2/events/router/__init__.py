@@ -1,4 +1,3 @@
-import json
 from uuid import UUID
 from ...client import ZendutyClient, ZendutyClientRequestMethod
 from .models import Router
@@ -59,7 +58,12 @@ class RouterClient:
         )
         return Router(**response)
 
-    def update_router(self, router: Router) -> Router:
+    def update_router(
+        self,
+        router_id: str,
+        name: str,
+        description: str,
+    ) -> Router:
         """Update a router
 
         Args:
@@ -68,15 +72,19 @@ class RouterClient:
         Returns:
             Router: Updated router object
         """
+        reques_payload = {
+            "name": name,
+            "description": description,
+        }
         response = self._client.execute(
             method=ZendutyClientRequestMethod.PUT,
-            endpoint=f"/api/v2/account/events/router/{str(router.unique_id)}/",
-            request_payload=json.loads(router.to_json()),
+            endpoint=f"/api/v2/account/events/router/{router_id}/",
+            request_payload=reques_payload,
             success_code=200,
         )
         return Router(**response)
 
-    def delete_router(self, router: Router):
+    def delete_router(self, router_id: str):
         """Delete a router
 
         Args:
@@ -84,6 +92,6 @@ class RouterClient:
         """
         self._client.execute(
             method=ZendutyClientRequestMethod.DELETE,
-            endpoint=f"/api/v2/account/events/router/{str(router.unique_id)}/",
+            endpoint=f"/api/v2/account/events/router/{router_id}/",
             success_code=204,
         )
