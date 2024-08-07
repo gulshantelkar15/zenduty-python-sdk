@@ -15,7 +15,7 @@ class IncidentClient:
         """
         self._client = client
 
-    def get_note_client(self, incident_id: str) -> IncidentNoteClient:
+    def get_note_client(self, incident: Incident) -> IncidentNoteClient:
         """Reutrns the Incident Notes client
 
         Args:
@@ -24,10 +24,9 @@ class IncidentClient:
         Returns:
             IncidentNoteClient: The IncidentNoteClient object is returned which can be used to perform various operations on incident notes.
         """
-        incident = self.get_incident_by_unique_id(incident_id)
         return IncidentNoteClient(self._client, incident)
 
-    def get_tags_client(self, incident_id: str) -> IncidentTagClient:
+    def get_tags_client(self, incident: Incident) -> IncidentTagClient:
         """Reutrns the Incident Tags client
 
         Args:
@@ -36,7 +35,6 @@ class IncidentClient:
         Returns:
             IncidentTagClient: The IncidentTagClient object is returned which can be used to perform various operations on incident tags.
         """
-        incident = self.get_incident_by_unique_id(incident_id)
         return IncidentTagClient(self._client, incident)
 
     def get_all_incidents(
@@ -94,11 +92,11 @@ class IncidentClient:
         )
         return response.get("results", [])
 
-    def get_incident_by_unique_id(self, incident_id: str) -> Incident:
+    def get_incident_by_unique_id_or_incident_number(self, incident_id: str) -> Incident:
         """Return a Incident by its unique_id
 
         Args:
-            incident_id (str): the incident unique_id for which to retrieve the incident
+            incident_id (str): the incident number or incident unique id for which to retrieve the incident
 
         Returns:
             Incident: The returned Incident object
@@ -136,7 +134,7 @@ class IncidentClient:
 
     def update_incident(
         self,
-        incident_id: str,
+        incident_id: Incident,
         service: UUID,
         title: str = None,
         summary: str = None,
@@ -145,7 +143,7 @@ class IncidentClient:
         """Updates the incident object attributes with the specified incident number. Uses existing values if new ones are not provided.
 
         Args:
-            incident_id (str): The ID of the incident to update.
+            incident_id (str): The incident number or incident unique id of the incident to update.
             title (str, optional): New title for the incident. Defaults to None.
             summary (str, optional): New summary for the incident. Defaults to None.
             status (int, optional): New status for the incident. Defaults to None.
@@ -153,7 +151,7 @@ class IncidentClient:
         Returns:
             Incident: The updated incident object.
         """
-        current_incident = self.get_incident_by_unique_id(incident_id)
+        current_incident = self.get_incident_by_unique_id_or_incident_number(incident_id)
 
         if title is None:
             title = current_incident.title

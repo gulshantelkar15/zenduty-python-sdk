@@ -18,10 +18,10 @@ client = ZendutyClient(credential=cred, use_https=True)  # defaults to default s
 
 # >>>>>>>> Accout member client
 member_client = AccountMemberClient(client=client)
-# team = "8b0e01fe-a64d-4252-89ac-7e231dc9a4e3"
+team = "8b0e01fe-a64d-4252-89ac-7e231dc9a4e3"
 # member = member_client.invite(
 #     team_id=team,
-#     email="john.doe.1@zenduty.com",
+#     email="john.doe@zenduty.com",
 #     first_name="John",
 #     last_name="doe",
 #     role=3,
@@ -29,35 +29,34 @@ member_client = AccountMemberClient(client=client)
 
 # print("Created member...")
 # print(member)
+# member_by_id = member_client.get_account_member("78a7a407-d630-4874-aca5-c")
 # updated_member = member_client.update_account_member(
-#     account_member_username="3ed1ddac-eae2-4246-a46c-e",
-#     first_name="update",
+#     member_by_id,
+#     first_name="hello",
 # )
+# print(updated_member)
 
 
 # print("updating member...")
 # print(updated_member)
 
-# member = member_client.delete_account_member(account_member_id="1e84b87a-7cd1-4926-a726-5")
+# member = member_client.delete_account_member(member_by_id)
 
 
 # >>>>>>> Account Role client
 
-# role_client = AccountRoleClient(client=client)
+role_client = AccountRoleClient(client=client)
 
 # role_create = role_client.create_account_role(name="test", description="test", permissions=["sla_read"])
 # print("Created role...", role_create)
-
-# get_role = role_client.get_account_role(account_role_id="3d4206bf-6b3c-477d-8b22-ea1a69767f3d")
+# get_role = role_client.get_account_role(account_role_id="9679863a-ee17-4403-baa1-f1d11e004080")
 # print("Get role...", get_role)
 
 # all_roles = role_client.list_account_roles()
 # print("All roles...", all_roles)
 
 
-# update_role = role_client.update_account_role(
-#     account_role_id="3d4206bf-6b3c-477d-8b22-ea1a69767f3d", name="test_updated", permissions=["sla_read"]
-# )
+# update_role = role_client.update_account_role(get_role, name="test_updated", permissions=["sla_read"])
 # print(update_role)
 
 # delete_role = role_client.delete_account_role(account_role_id="3d4206bf-6b3c-477d-8b22-ea1a69767f3d")
@@ -75,13 +74,13 @@ member_client = AccountMemberClient(client=client)
 
 # create_router = router_client.create_router(name="hello", description="hello")
 # print(create_router)
-
+# router = get_router_by_id("29af7730-734e-4c5d-8085-7b44b70f718e")
 # update_router = router_client.update_router(
-#     router_id="29af7730-734e-4c5d-8085-7b44b70f718e", name="bro", description="bro"
+#     router, name="bro", description="bro"
 # )
 # print(update_router)
 
-# delete_router = router_client.delete_router(router_id="29af7730-734e-4c5d-8085-7b44b70f718e")
+# delete_router = router_client.delete_router(router)
 
 # >>>>>>>>>>>> Events
 
@@ -123,9 +122,12 @@ incident_client = IncidentClient(client=client)
 # print(all_alerts)
 
 ## >>>>>>>>>>>>>>>> Incdent Tags and Notes
+# incident = incident_client.get_incident_by_unique_id_or_incident_number(incident_id="D8nd9yLtQDqkrqLBXfkKBA")
+# incident = incident_client.get_incident_by_unique_id_or_incident_number(incident_id=384)
 
-note_client = incident_client.get_note_client(incident_id=384)
-# tag_client = incident_client.get_tags_client(incident_id=384)
+# note_client = incident_client.get_note_client(incident)
+
+# tag_client = incident_client.get_tags_client(incident)
 
 
 # all_tags = tag_client.get_all_tags()
@@ -138,7 +140,7 @@ note_client = incident_client.get_note_client(incident_id=384)
 # create_tag = tag_client.create_tag(team_tag="52b202cb-42a6-4687-9393-4bbf2b5a449a")
 # print(create_tag)
 
-# delete_tag = tag_client.delete_tag(tag_unique_id="1b6ddf90-256e-4cd3-b794-60ee8a8ab549")
+# delete_tag = tag_client.delete_tag(tag_by_id)
 
 
 # get_all_notes = note_client.get_all_incident_notes()
@@ -147,10 +149,10 @@ note_client = incident_client.get_note_client(incident_id=384)
 # note_by_id = note_client.get_incident_note_by_id(incident_note_unique_id="XJibLaC6pqVZJck62hEJiV")
 # print(note_by_id)
 
-# update_note = note_client.update_incident_note(incident_note_unique_id="XJibLaC6pqVZJck62hEJiV", note="updated note")
+# update_note = note_client.update_incident_note(note_by_id, note="updated note")
 # print(update_note)
 
-# delete_note = note_client.delete_incident_note(incident_note_unique_id="XJibLaC6pqVZJck62hEJiV")
+# delete_note = note_client.delete_incident_note(note_by_id)
 
 # create_note = note_client.create_incident_note(note="This is a test note")
 # print(create_note)

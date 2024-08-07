@@ -96,7 +96,7 @@ class IncidentNoteClient:
         )
         return IncidentNote(**response)
 
-    def update_incident_note(self, incident_note_unique_id: str, note: str) -> IncidentNote:
+    def update_incident_note(self, incident_note: IncidentNote, note: str) -> IncidentNote:
         """Update a incident note object with given changes identified by unique identifier
 
         Args:
@@ -108,13 +108,13 @@ class IncidentNoteClient:
         request_payload = {"note": note}
         response = self._client.execute(
             method=ZendutyClientRequestMethod.PUT,
-            endpoint="/api/incidents/%d/note/%s/" % (self._incident.incident_number, incident_note_unique_id),
+            endpoint="/api/incidents/%d/note/%s/" % (self._incident.incident_number, incident_note.unique_id),
             request_payload=request_payload,
             success_code=200,
         )
         return IncidentNote(**response)
 
-    def delete_incident_note(self, incident_note_unique_id: str) -> None:
+    def delete_incident_note(self, incident_note: IncidentNote) -> None:
         """Delete a incident note object
 
         Args:
@@ -122,6 +122,6 @@ class IncidentNoteClient:
         """
         self._client.execute(
             method=ZendutyClientRequestMethod.DELETE,
-            endpoint="/api/incidents/%d/note/%s/" % (self._incident.incident_number, incident_note_unique_id),
+            endpoint="/api/incidents/%d/note/%s/" % (self._incident.incident_number, incident_note.unique_id),
             success_code=204,
         )

@@ -68,17 +68,7 @@ class IncidentTagClient:
         )
         return Tag(**response)
 
-    # def update_incident_note(self, note: Tag) -> Tag:
-    #     response = self._client.execute(
-    #         method=ZendutyClientRequestMethod.PUT,
-    #         endpoint="/api/incidents/%d/tags/%s/"
-    #         % (self._incident.incident_number, note.unique_id),
-    #         request_payload=json.loads(note.to_json()),
-    #         success_code=200,
-    #     )
-    #     return Tag(**response)
-
-    def delete_tag(self, tag_unique_id: Tag) -> None:
+    def delete_tag(self, tag: Tag) -> None:
         """Delete a specific tag
 
         Args:
@@ -86,6 +76,6 @@ class IncidentTagClient:
         """
         self._client.execute(
             method=ZendutyClientRequestMethod.DELETE,
-            endpoint="/api/incidents/%d/tags/%s/" % (self._incident.incident_number, str(tag_unique_id)),
+            endpoint="/api/incidents/%d/tags/%s/" % (self._incident.incident_number, str(tag.unique_id)),
             success_code=204,
         )

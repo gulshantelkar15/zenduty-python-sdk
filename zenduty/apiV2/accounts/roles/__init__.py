@@ -66,7 +66,7 @@ class AccountRoleClient:
 
     def update_account_role(
         self,
-        account_role_id: str,
+        account_role: AccountRole,
         permissions: list[str],
         name: str = None,
         description: str = None,
@@ -83,19 +83,18 @@ class AccountRoleClient:
             AccountRole: Updated information about the account role
         """
         # Fetch current account role details
-        current_role = self.get_account_role(account_role_id)
 
         # Prepare the request payload with either new values or existing ones
         request_payload = {
-            "name": name if name is not None else current_role.name,
-            "description": description if description is not None else current_role.description,
-            "permissions": permissions if permissions is not None else current_role.permissions,
+            "name": name if name is not None else account_role.name,
+            "description": description if description is not None else account_role.description,
+            "permissions": permissions if permissions is not None else account_role.permissions,
         }
 
         # Execute the update request
         response = self._client.execute(
             method=ZendutyClientRequestMethod.PUT,
-            endpoint=f"/api/account/customroles/{account_role_id}/",
+            endpoint=f"/api/account/customroles/{account_role.unique_id}/",
             request_payload=request_payload,
             success_code=200,
         )
@@ -105,7 +104,7 @@ class AccountRoleClient:
 
     def delete_account_role(
         self,
-        account_role_id: str,
+        account_role: AccountRole,
     ) -> None:
         """Delete account role
 
@@ -114,6 +113,6 @@ class AccountRoleClient:
         """
         self._client.execute(
             method=ZendutyClientRequestMethod.DELETE,
-            endpoint=f"/api/account/customroles/{account_role_id}/",
+            endpoint=f"/api/account/customroles/{account_role.unique_id}/",
             success_code=204,
         )

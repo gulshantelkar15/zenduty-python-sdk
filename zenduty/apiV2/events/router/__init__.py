@@ -60,7 +60,7 @@ class RouterClient:
 
     def update_router(
         self,
-        router_id: str,
+        router: Router,
         name: str,
         description: str,
     ) -> Router:
@@ -78,13 +78,13 @@ class RouterClient:
         }
         response = self._client.execute(
             method=ZendutyClientRequestMethod.PUT,
-            endpoint=f"/api/v2/account/events/router/{router_id}/",
+            endpoint=f"/api/v2/account/events/router/{router.unique_id}/",
             request_payload=reques_payload,
             success_code=200,
         )
         return Router(**response)
 
-    def delete_router(self, router_id: str):
+    def delete_router(self, router: Router):
         """Delete a router
 
         Args:
@@ -92,6 +92,6 @@ class RouterClient:
         """
         self._client.execute(
             method=ZendutyClientRequestMethod.DELETE,
-            endpoint=f"/api/v2/account/events/router/{router_id}/",
+            endpoint=f"/api/v2/account/events/router/{router.unique_id}/",
             success_code=204,
         )

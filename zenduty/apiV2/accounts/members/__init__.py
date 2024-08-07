@@ -46,10 +46,11 @@ class AccountMemberClient:
 
     def update_account_member(
         self,
-        account_member_username: str,
+        account_member: AccountMember,
         first_name: str = None,
         last_name: str = None,
         role: int = None,
+        email: str = None,
     ) -> AccountMember:
         """Update account member information with optional fields
 
@@ -63,13 +64,12 @@ class AccountMemberClient:
             AccountMember: Updated account member information from the server
         """
         # Fetch current account member details
-        current_member = self.get_account_member(account_member_username)
 
         # Prepare the user part of the request payload
         user_payload = {
-            "username": account_member_username,
-            "first_name": first_name if first_name is not None else current_member.user.first_name,
-            "last_name": last_name if last_name is not None else current_member.user.last_name,
+            "username": account_member.user.username,
+            "first_name": first_name if first_name is not None else account_member.user.first_name,
+            "last_name": last_name if last_name is not None else account_member.user.last_name,
         }
 
         # Initialize the request payload with the user information
@@ -79,12 +79,11 @@ class AccountMemberClient:
         if role is not None:
             request_payload["role"] = role
         else:
-            request_payload["role"] = current_member.role
-
+            request_payload["role"] = account_member.role
         # Execute the update request
         response = self._client.execute(
             method=ZendutyClientRequestMethod.PUT,
-            endpoint=f"/api/account/members/{account_member_username}/",
+            endpoint=f"/api/account/members/{account_member.user.username}/",
             request_payload=request_payload,
             success_code=200,
         )
@@ -121,7 +120,7 @@ class AccountMemberClient:
         )
         return [AccountMember(**member) for member in response]
 
-    def delete_account_member(self, account_member_id: str) -> None:
+    def delete_account_member(self, account_member: AccountMember) -> None:
         """delete a account member
 
         Args:
@@ -131,7 +130,7 @@ class AccountMemberClient:
             method=ZendutyClientRequestMethod.POST,
             endpoint="/api/account/deleteuser/",
             request_payload={
-                "username": account_member_id,
+                "username": account_member.user.username,
             },
             success_code=204,
         )
